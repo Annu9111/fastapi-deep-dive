@@ -1,5 +1,6 @@
 #importing fast api module
 from fastapi import FastAPI
+from pydantic import BaseModel,ConfigDict
 
 # creating an app of fastapi
 app=FastAPI()
@@ -28,5 +29,14 @@ def deleted(id:str):
 def query_something(q:str):
     return {"q":q,"msg":"query received"}
     
-        
+class Post(BaseModel):
+    title:str
+    description:str
+    model_config = ConfigDict(
+        extra='forbid'
+    )
+    
+@app.post("/create_post")
+def create_post(post:Post):
+    return {"post":post,"msg":"Post created"}      
         
