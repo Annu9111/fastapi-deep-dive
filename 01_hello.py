@@ -12,6 +12,21 @@ def helo():     #api function
 def list_of_val():
     return [1,2,3,4,5,6,5]
 
+@app.post('/create')
+def create(data:dict):
+    return {"data" : data ,"message":"created"}  
 
+@app.put("/update/{id}")
+def update(id:str,data:dict):
+    return {"id" : id,"data":data,"msg":"update"}
+
+@app.delete("/deleted/{id}")
+def deleted(id:str):
+    return {"id":id,"message":"deleted"}
+
+@app.get("/home")
+def query_something(q:str):
+    return {"q":q,"msg":"query received"}
+    
         
         
