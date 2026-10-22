@@ -3,7 +3,11 @@ from fastapi import FastAPI
 from pydantic import BaseModel,ConfigDict
 
 # creating an app of fastapi
-app=FastAPI()
+app=FastAPI(
+    title="Fast api learning docs",
+    description="this is my fastapi description box",
+    version="0.0.1" 
+)
 
 @app.get('/')     #decorator - method - route
 def helo():     #api function
@@ -13,7 +17,7 @@ def helo():     #api function
 def list_of_val():
     return [1,2,3,4,5,6,5]
 
-@app.post('/create')
+@app.post('/create',tags=["Learn"])
 def create(data:dict):
     return {"data" : data ,"message":"created"}  
 
@@ -38,7 +42,11 @@ class Post(BaseModel):
         extra='forbid'
     )
     
-@app.post("/create_post")
-def create_post(post:Post):
-    return {"post":post,"msg":"Post created"}      
+class Post_out(BaseModel):
+    post : Post
+    msg : str    
+    
+@app.post("/create_post",response_model=Post_out)
+def create_post(post:Post)->Post_out:
+    return Post_out(post=Post,msg = "post created")     
         
