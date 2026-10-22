@@ -28,6 +28,8 @@ def deleted(id:str):
 @app.get("/home")
 def query_something(q:str):
     return {"q":q,"msg":"query received"}
+
+
     
 class Post(BaseModel):
     title:str
