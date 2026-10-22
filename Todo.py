@@ -11,7 +11,7 @@ class Todo(BaseModel):
     id : UUID = Field(default_factory=uuid4)
     name:str
     category : str
-    status : bool
+    status : bool =False
 
 # local variable for todo
 db : list[Todo]=[]
