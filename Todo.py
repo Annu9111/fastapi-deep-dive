@@ -54,3 +54,18 @@ def update_name(id: UUID, data: TodoNameUpdate):
         todo.name = data.name
         return TodoCreateOut(todo=todo, msg="Todo is updated")
     return BaseOut(msg="todo with this id does not exist")
+
+@app.delete("/delete/{id}",response_model=BaseOut)
+def delete_todo(id:str)->BaseOut:
+    try:
+        id = UUID(id)
+    except Exception as ex:
+        return BaseOut(msg="wrong UUid",error=str(ex))
+    
+    for i, todo in enumerate(db):
+        if todo.id == id:
+            del db[i]
+            return BaseOut(msg="todo deleted")
+    return BaseOut(msg="Todo with UUid is not available")
+            
+    
