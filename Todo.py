@@ -1,73 +1,56 @@
-# import fast api
 from fastapi import FastAPI
-from pydantic import BaseModel,Field
-from uuid import UUID,uuid4            #uuid4 is used to create unique and random number
+from pydantic import BaseModel, Field
+from uuid import UUID, uuid4
 
-#creating fastapi app
 app = FastAPI()
 
-#pydantic model for todo
 class Todo(BaseModel):
-    id : UUID = Field(default_factory=uuid4)
-    name:str
-    category : str
-    status : bool =False
+    id: UUID = Field(default_factory=uuid4)
+    name: str
+    category: str
+    status: bool = False
 
-# local variable for todo
-db : list[Todo]=[]
+class TodoNameUpdate(BaseModel):
+    name: str
 
-# base pydantic mmodel for response
+db: list[Todo] = []
+
 class BaseOut(BaseModel):
-    msg:str
-    error:str | None = None
+    msg: str
+    error: str | None = None
 
-
-# create route -> used to create new todo
 class TodoCreateOut(BaseOut):
-    todo:Todo
+    todo: Todo
 
+class TodoGetOut(BaseOut):
+    todos: list[Todo]
 
-
-@app.post("/create",response_model=TodoCreateOut)
-def create_todo(todo:Todo)->TodoCreateOut:
-    db.append(todo)
-    return TodoCreateOut(todo=todo,msg="todo created !")
-
-
-#get route -> used to fetch todos
-
-class TodoGetout(BaseOut):
-    todos:list[Todo]
-
-@app.get("/todos",response_model=TodoGetout)
-def fetch_todos():
-    return TodoGetout(todos=db,msg="todos fetched")
-
-
-#get route -> used to fetch a specific todo using its unique id
-@app.get("/todo/{id}",response_model=TodoCreateOut | BaseOut)
-def fetch_todo(id:str)->TodoCreateOut | BaseOut:
-    try:
-        id = UUID(id)
-    except Exception as ex:
-        return BaseOut(msg="Wrong UUid",error=str(ex))
-           
+def find_todo(todo_id: UUID) -> Todo | None:
     for todo in db:
-        if todo.id == id:
-            return TodoCreateOut(todo=todo,msg="todo found")
+        if todo.id == todo_id:
+            return todo
+    return None
+
+@app.post("/create", response_model=TodoCreateOut)
+def create_todo(todo: Todo):
+    db.append(todo)
+    return TodoCreateOut(todo=todo, msg="todo created !")
+
+@app.get("/todos", response_model=TodoGetOut)
+def fetch_todos():
+    return TodoGetOut(todos=db, msg="todos fetched")
+
+@app.get("/todo/{id}", response_model=TodoCreateOut | BaseOut)
+def fetch_todo(id: UUID):
+    todo = find_todo(id)
+    if todo:
+        return TodoCreateOut(todo=todo, msg="todo found")
     return BaseOut(msg="todo not found")
 
-
-#update route -> used to update the name of specific todos
-@app.put("/update_name/{id}",response_model=TodoCreateOut | BaseOut)
-def update_name(id:str , todo:Todo)->TodoCreateOut|BaseOut:
-    try:
-        id=UUID(id)
-    except Exception as ex:
-        return BaseOut(msg="wrong UUid",error=str(ex))
-    for _todo in db:
-        if _todo.id == todo.id:
-            _todo.name = todo.name
-            return TodoCreateOut(todo=_todo,msg="Todo is updated")
-    return BaseOut(msg="todo with this id does not exists")
-    
+@app.put("/update_name/{id}", response_model=TodoCreateOut | BaseOut)
+def update_name(id: UUID, data: TodoNameUpdate):
+    todo = find_todo(id)
+    if todo:
+        todo.name = data.name
+        return TodoCreateOut(todo=todo, msg="Todo is updated")
+    return BaseOut(msg="todo with this id does not exist")
