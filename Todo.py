@@ -58,3 +58,16 @@ def fetch_todo(id:str)->TodoCreateOut | BaseOut:
     return BaseOut(msg="todo not found")
 
 
+#update route -> used to update the name of specific todos
+@app.put("/update_name/{id}",response_model=TodoCreateOut | BaseOut)
+def update_name(id:str , todo:Todo)->TodoCreateOut|BaseOut:
+    try:
+        id=UUID(id)
+    except Exception as ex:
+        return BaseOut(msg="wrong UUid",error=str(ex))
+    for _todo in db:
+        if _todo.id == todo.id:
+            _todo.name = todo.name
+            return TodoCreateOut(todo=_todo,msg="Todo is updated")
+    return BaseOut(msg="todo with this id does not exists")
+    
