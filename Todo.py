@@ -1,7 +1,7 @@
 # import fast api
 from fastapi import FastAPI
 from pydantic import BaseModel,Field
-from uuid import UUID,uuid4            #uuid4 is used to create unique id using current date and time
+from uuid import UUID,uuid4            #uuid4 is used to create unique and random number
 
 #creating fastapi app
 app = FastAPI()
@@ -19,7 +19,7 @@ db : list[Todo]=[]
 # base pydantic mmodel for response
 class BaseOut(BaseModel):
     msg:str
-    error:str = None
+    error:str | None
 
 
 # create route -> used to create new todo
@@ -31,7 +31,7 @@ class TodoCreateOut(BaseOut):
 @app.post("/create",response_model=TodoCreateOut)
 def create_todo(todo:Todo)->TodoCreateOut:
     db.append(todo)
-    return TodoCreateOut(todo=Todo,msg="todo created !")
+    return TodoCreateOut(todo=todo,msg="todo created !")
 
 
 #get route -> used to fetch todos
@@ -39,7 +39,7 @@ def create_todo(todo:Todo)->TodoCreateOut:
 class TodoGetout(BaseOut):
     todos:list[Todo]
 
-@app.get("/todos")
+@app.get("/todos",response_model=TodoGetout)
 def fetch_todos():
     return TodoGetout(todos=db,msg="todos fetched")
 
