@@ -19,7 +19,7 @@ db : list[Todo]=[]
 # base pydantic mmodel for response
 class BaseOut(BaseModel):
     msg:str
-    error:str | None
+    error:str | None = None
 
 
 # create route -> used to create new todo
@@ -51,10 +51,10 @@ def fetch_todo(id:str)->TodoCreateOut | BaseOut:
         id = UUID(id)
     except Exception as ex:
         return BaseOut(msg="Wrong UUid",error=str(ex))
-        
-            
-    
+           
     for todo in db:
         if todo.id == id:
             return TodoCreateOut(todo=todo,msg="todo found")
     return BaseOut(msg="todo not found")
+
+
