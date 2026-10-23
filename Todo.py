@@ -46,7 +46,14 @@ def fetch_todos():
 
 #get route -> used to fetch a specific todo using its unique id
 @app.get("/todo/{id}",response_model=TodoCreateOut | BaseOut)
-def fetch_todo(id:UUID)->TodoCreateOut | BaseOut:
+def fetch_todo(id:str)->TodoCreateOut | BaseOut:
+    try:
+        id = UUID(id)
+    except Exception as ex:
+        return BaseOut(msg="Wrong UUid",error=str(ex))
+        
+            
+    
     for todo in db:
         if todo.id == id:
             return TodoCreateOut(todo=todo,msg="todo found")
