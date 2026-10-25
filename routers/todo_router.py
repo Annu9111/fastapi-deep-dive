@@ -1,4 +1,4 @@
-from fastapi import APIRouter,FastAPI
+from fastapi import APIRouter,FastAPI,Response
 from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
 
@@ -45,7 +45,7 @@ def fetch_todo(id: UUID):
     todo = find_todo(id)
     if todo:
         return TodoCreateOut(todo=todo, msg="todo found")
-    return BaseOut(msg="todo not found")
+    return Response(content= BaseOut(msg="todo not found"))
 
 @todo_router.put("/update_name/{id}", response_model=TodoCreateOut | BaseOut)
 def update_name(id: UUID, data: TodoNameUpdate):
