@@ -35,15 +35,18 @@ def find_todo(todo_id: UUID) -> Todo | None:
 def create_todo(todo: Todo):
     db.append(todo)
     return TodoCreateOut(todo=todo, msg="todo created !")
+
 @todo_router.get("/todos", response_model=TodoGetOut)
 def fetch_todos():
     return TodoGetOut(todos=db, msg="todos fetched")
+
 @todo_router.get("/todo/{id}", response_model=TodoCreateOut | BaseOut)
 def fetch_todo(id: UUID):
     todo = find_todo(id)
     if todo:
         return TodoCreateOut(todo=todo, msg="todo found")
     return BaseOut(msg="todo not found")
+
 @todo_router.put("/update_name/{id}", response_model=TodoCreateOut | BaseOut)
 def update_name(id: UUID, data: TodoNameUpdate):
     todo = find_todo(id)
