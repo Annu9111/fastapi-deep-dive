@@ -1,8 +1,12 @@
 from fastapi import APIRouter,FastAPI,Response
 from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 todo_router = APIRouter(prefix="/todo",tags=["todo"])
+
+limiter = Limiter(key_func=get_remote_address)
 
 class Todo(BaseModel):
     id: UUID = Field(default_factory=uuid4)
@@ -32,6 +36,7 @@ def find_todo(todo_id: UUID) -> Todo | None:
     return None
 
 @todo_router.post("/create", response_model=TodoCreateOut)
+@limiter.limit("2/minute")
 def create_todo(todo: Todo):
     db.append(todo)
     return TodoCreateOut(todo=todo, msg="todo created !")
