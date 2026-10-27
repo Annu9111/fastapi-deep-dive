@@ -21,7 +21,7 @@ def students():
     return load_data()
 
 @app.get("/students/{student_id}")
-def get_id(student_id:str = Path(...,description="the id of the student",example="P001")):
+def get_id(student_id:str = Path(...,description="the id of the student",example="S001")):
     data = load_data()
     if student_id not in data:
         raise HTTPException(status_code=404,detail=f"student with this {student_id} id does not exists")
