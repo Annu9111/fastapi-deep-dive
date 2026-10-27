@@ -1,0 +1,72 @@
+{
+  "S001": {
+    "name": "Aarav Sharma",
+    "age": 20,
+    "email": "aarav.sharma@example.com",
+    "course": "Python",
+    "marks": 92
+  },
+  "S002": {
+    "name": "Diya Patel",
+    "age": 21,
+    "email": "diya.patel@example.com",
+    "course": "Data Science",
+    "marks": 85
+  },
+  "S003": {
+    "name": "Rohan Mehta",
+    "age": 22,
+    "email": "rohan.mehta@example.com",
+    "course": "Web Development",
+    "marks": 78
+  },
+  "S004": {
+    "name": "Ananya Iyer",
+    "age": 19,
+    "email": "ananya.iyer@example.com",
+    "course": "Python",
+    "marks": 88
+  },
+  "S005": {
+    "name": "Kabir Singh",
+    "age": 23,
+    "email": "kabir.singh@example.com",
+    "course": "Machine Learning",
+    "marks": 95
+  },
+  "S006": {
+    "name": "Meera Nair",
+    "age": 20,
+    "email": "meera.nair@example.com",
+    "course": "Data Science",
+    "marks": 72
+  },
+  "S007": {
+    "name": "Vikram Rao",
+    "age": 24,
+    "email": "vikram.rao@example.com",
+    "course": "Web Development",
+    "marks": 81
+  },
+  "S008": {
+    "name": "Sneha Reddy",
+    "age": 21,
+    "email": "sneha.reddy@example.com",
+    "course": "Machine Learning",
+    "marks": 90
+  },
+  "S009": {
+    "name": "Arjun Verma",
+    "age": 22,
+    "email": "arjun.verma@example.com",
+    "course": "Python",
+    "marks": 67
+  },
+  "S010": {
+    "name": "Isha Gupta",
+    "age": 19,
+    "email": "isha.gupta@example.com",
+    "course": "Data Science",
+    "marks": 94
+  }
+}
