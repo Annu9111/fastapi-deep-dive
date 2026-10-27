@@ -26,4 +26,19 @@ def get_id(student_id:str = Path(...,description="the id of the student",example
     if student_id not in data:
         raise HTTPException(status_code=404,detail=f"student with this {student_id} id does not exists")
     return data[student_id]
+
+@app.get("/filter")
+def filter_student(course:str):
+    data=load_data()
+    
+    if course not in data:
+        return data
+    
+    filtered = {}
+    for student_id, info in data.items():
+        if info["course"]==course:
+            filtered[student_id] = info
+    return filtered
+        
+        
     
