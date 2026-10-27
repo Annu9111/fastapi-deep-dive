@@ -55,7 +55,7 @@ def sort_students(
     sort_by : str =Query(None,description="sort by marks,age,name",examples=["marks"]),
     order : str=Query(None,description="order by asc,desc",examples=["asc"])
     ):
-    
+     
     if sort_by not in SORT_FIELDS:
         raise HTTPException(status_code=404,detail=f"invalid sort_by {sort_by}, choose from {SORT_FIELDS}")
     
