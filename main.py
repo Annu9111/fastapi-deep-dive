@@ -79,5 +79,15 @@ def sort_students(
     
         
         
+#pagination
+@app.get("/paginate")
+def paginate_student(page:int , limit:int):
+    data = load_data()
+    
+    #step1-> turn a dictionary into a listand putting the id inside each student
+    student = []
+    for stud_id,info in data.items():
+        info["id"]=stud_id
+        student.append(info)
         
     
