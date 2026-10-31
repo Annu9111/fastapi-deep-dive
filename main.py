@@ -89,5 +89,18 @@ def paginate_student(page:int , limit:int):
     for stud_id,info in data.items():
         info["id"]=stud_id
         student.append(info)
-        
+    
+    start = (page -1) *limit
+    end = start + limit
+    page_student = student[start : end]
+    
+    total_student = len(student)
+    
+    return {
+        "page":page,
+        "limit":limit,
+        "total_student":total_student,
+        "students":page_student
+    }
+    
     
