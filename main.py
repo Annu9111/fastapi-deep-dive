@@ -104,3 +104,9 @@ def paginate_student(page:int , limit:int):
     }
     
     
+# Request body
+#post-> data comes in the body (a JSON object sent with the request )
+
+# @app.post("/create",status_code=201)
+# def create_student():
+    
