@@ -23,6 +23,9 @@ def load_data():
 def students():
     return load_data()
 
+@app.post("/students")
+def students():
+    return load_data()
 
 #path parameter
 @app.get("/students/{student_id}")
