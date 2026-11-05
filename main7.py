@@ -17,7 +17,7 @@ def create_users(user:User):
     
 @app.put("/users/{user_id}")
 def updated_user(user_id:int,user:User,notify:bool=False):
-    if user_id < len(user):
+    if 0<=user_id < len(user):
         user_list[user_id]=user
         
         return {"message":"user updated"}
