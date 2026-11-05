@@ -14,3 +14,21 @@ def create_user(user:User):
         "message":"user created",
         "data":user
     }
+    
+#nested models
+
+class Address(BaseModel):
+    city:str
+    pincode:int
+    
+class person(BaseModel):
+    name:str
+    age:int
+    address:Address
+    
+@app.post("/person")
+def create_person(per:person):
+    return {
+        "message":"person created !",
+        "data":per
+    }
