@@ -18,6 +18,7 @@ def user():
     return {"users":["mohit","rohit","ram","shayam"]}
 
 
+#path parammeters
 @app.get("/users/{user_id}")
 def get_id(user_id:int):
     return {f"the user id is {user_id}"}
