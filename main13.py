@@ -26,3 +26,5 @@ def home():
     return {
         "message":"sqlite connected fine"
     }
+    
+    
