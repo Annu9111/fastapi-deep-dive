@@ -45,12 +45,17 @@ def create_todo(title:str,db:Session=Depends(get_db)):
 
 #read all data
 @app.get("/todos")
-def get_todo(db:Session=Depends(get_db)):
+def get_todos(db:Session=Depends(get_db)):
     todos = db.query(Todo).all()
     
     return {
-        "Total" : len(todos),
+        "total" : len(todos),
         "data" : todos
     }
 
-     
+
+@app.get("/todos/{todo_id}")
+def get_todo(todo_id:int , db:Session=Depends(get_db)):
+    todo = db.query(Todo).filter(todo_id)
+    
+      
