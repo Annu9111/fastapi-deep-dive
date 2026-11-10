@@ -76,6 +76,19 @@ def update(todo_id:int ,title:str ,db:Session=Depends(get_db)):
         "message":"updated successfully"
     }
 
+
+#delete api
+@app("/todos/{todo_id}")
+def delete(todo_id:int,db:Session=Depends(get_db)):
+    todo = db.query(Todo).filter(Todo.id==todo_id).first()
+    
+    if not todo:
+        raise HTTPException(status_code=404,detail="id not found")
+    db.delete(todo)
+    db.commit()
+    return {
+        "message":"todo deleted successfully"
+    }
     
     
       
