@@ -16,3 +16,10 @@ def get_post():
     response = requests.get(url)
     return response.json()
 
+#get single post
+@app.get("/post/{post_id}")
+def getone(post_id:int):
+    url = f"https://jsonplaceholder.typicode.com/posts/{post_id}"
+    response = requests.get(url)
+    return response.json()
+
