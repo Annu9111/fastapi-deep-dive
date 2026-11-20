@@ -24,17 +24,28 @@ def create_todo(todo:Todo):
 
 @app.put("/{todo_id}")
 def update(todo_id:int,new_todo:Todo):
-    for index,todo in todos:
+    for index,todo in enumerate(todos):
         if todo.id == todo_id:
-            todo[index] = new_todo
+            todos[index] = new_todo
             return {
                 "message":"todo updated successfully"
             }
         else:
             raise HTTPException(status_code=404, detail="id not found")
 
+@app.delete("/{todo_id}")
+def delete(todo_id:int):
+    for index,todo in enumerate(todos):
+        if todo.id == todo_id:
+            del todos[index]
+            return{
+                "message":"todo deleted successfully"
+            }
+        else:
+            raise HTTPException(status_code=404,detail="todo not found")
+        
             
-    
+ 
 
 
 
