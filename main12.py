@@ -25,3 +25,4 @@ async def log_middleware(request:Request,call_next):
     
     print(f"path: {request.url.path} | time: {process_time}")
     return res
+
