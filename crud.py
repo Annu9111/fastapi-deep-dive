@@ -1,29 +1,38 @@
-from fastapi import FastAPI,HTTPException
+from fastapi import HTTPException,APIRouter,Depends
 from pydantic import BaseModel
+from database import get_db
+from sqlalchemy.orm import Session
+from models import Todo
+from typing import List
 
-app = FastAPI()
+router = APIRouter()
 
-class Todo(BaseModel):
+class TodoCreate(BaseModel):
     id:int
     name:str
     discription:str
+    done:bool
+
+class todo_response(TodoCreate):
+    id:int
 
 todos = []
     
 
-@app.get("/")
+@router.get("/")
 def home():
     return todos
 
-@app.post("/")
-def create_todo(todo:Todo):
-    todos.append(todo)
-    return{
-        "message":"todo successfully created"
-    }
+@router.post("/",response_model=todo_response) 
+def create_todo(todo:TodoCreate,db:Session=Depends(get_db)):
+    new_todo = Todo(title=todo.title,description=todo.description,done=todo.done)
+    db.add(new_todo)
+    db.commit()
+    
+    return new_todo
 
-@app.put("/{todo_id}")
-def update(todo_id:int,new_todo:Todo):
+@router.put("/{todo_id}")
+def update(todo_id:int,new_todo:TodoCreate):
     for index,todo in enumerate(todos):
         if todo.id == todo_id:
             todos[index] = new_todo
@@ -33,7 +42,7 @@ def update(todo_id:int,new_todo:Todo):
         else:
             raise HTTPException(status_code=404, detail="id not found")
 
-@app.delete("/{todo_id}")
+@router.delete("/{todo_id}")
 def delete(todo_id:int):
     for index,todo in enumerate(todos):
         if todo.id == todo_id:
