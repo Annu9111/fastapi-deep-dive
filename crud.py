@@ -19,39 +19,44 @@ class todo_response(TodoCreate):
 todos = []
     
 
-@router.get("/")
-def home():
-    return todos
+@router.get("/",response_model=list[todo_response])
+def home(db:Session=Depends(get_db)):
+    return db.query(todos).all()
+
 
 @router.post("/",response_model=todo_response) 
 def create_todo(todo:TodoCreate,db:Session=Depends(get_db)):
     new_todo = Todo(title=todo.title,description=todo.description,done=todo.done)
     db.add(new_todo)
     db.commit()
-    
+    db.refresh(new_todo)
     return new_todo
 
-@router.put("/{todo_id}")
-def update(todo_id:int,new_todo:TodoCreate):
-    for index,todo in enumerate(todos):
-        if todo.id == todo_id:
-            todos[index] = new_todo
-            return {
-                "message":"todo updated successfully"
-            }
-        else:
-            raise HTTPException(status_code=404, detail="id not found")
+@router.put("/{todo_id}",response_model=todo_response)
+def update(todo_id:int,new_todo:TodoCreate,db:Session=Depends(get_db)):
+    todo = db.query(Todo).filter(Todo.id == todo_id).first()
+    if not todo:
+        raise HTTPException(status_code=404,detail="todo not found")
+    Todo.title = todo.title
+    Todo.description = todo.description
+    Todo.done = todo.done
+    db.commit()
+    return Todo
+    
 
 @router.delete("/{todo_id}")
-def delete(todo_id:int):
-    for index,todo in enumerate(todos):
-        if todo.id == todo_id:
-            del todos[index]
-            return{
-                "message":"todo deleted successfully"
-            }
-        else:
-            raise HTTPException(status_code=404,detail="todo not found")
+def delete(todo_id:int,db:Session=Depends(get_db)):
+    Todo = db.query(Todo).filter(Todo.id==todo_id).first()
+    if not Todo:
+        return HTTPException(status_code=404,detail="todo not found")
+    db.delete(Todo)
+    db.commit()
+    return{
+        "message":"db deleted successfully"
+    }
+    
+    
+           
         
             
  
